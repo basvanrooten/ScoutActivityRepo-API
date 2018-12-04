@@ -46,9 +46,8 @@ module.exports = {
             assert(typeof (userProps.password) === "string", "Wachtwoord moet een string zijn");
         } catch (e) {
             // Assertion exception
-            res.status(422).send(new ApiResponse(e.message, 422));
+            res.status(422).send(new ApiResponse(e.message, 422)).end();
             return;
-            next();
         }
 
         userExists(userProps.email, (result) => {
@@ -70,20 +69,21 @@ module.exports = {
                                 }, (err, token) => {
                                     // Send the token
                                     res.status(200).json({
-                                        "token": token
-                                    });
-                                    next();
+                                        "token": token,
+                                        "email": user.email,
+                                        "firstName": user.firstName,
+                                        "lastName": user.lastName
+                                    }).end();
                                 });
                             } else {
                                 // No matching password found for email. Return error
-                                res.status(401).send(new ApiResponse('Inloggegevens niet gevonden', 401));
-                                next();
+                                res.status(401).send(new ApiResponse('Inloggegevens niet gevonden', 401)).end();
                             }
                         })
                     })
             } else {
                 // No email found. Return error
-                res.status(401).send(new ApiResponse('Ongeldige email', 401));
+                res.status(401).send(new ApiResponse('Ongeldige email', 401)).end();
             }
         });
     },
@@ -111,7 +111,7 @@ module.exports = {
 
         } catch (e) {
             // Assertion exception
-            res.status(422).send(new ApiResponse(e.message), 422);
+            res.status(422).send(new ApiResponse(e.message), 422).end();
             return;
         }
 
@@ -129,7 +129,7 @@ module.exports = {
                     })
                 });
             } else {
-                res.status(401).send(new ApiResponse('Username already exists', 401));
+                res.status(401).send(new ApiResponse('Username already exists', 401)).end();
             }
         });
     }
