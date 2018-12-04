@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require("morgan");
-const mongoose = require('mongoose');
 const ApiResponse = require('./models/ApiReponse');
 
 const app = express();
@@ -12,7 +11,7 @@ app.use(bodyParser.json());
 // Setup Morgan as Logger
 app.use(morgan("dev"));
 
-// Start routes
+// Routes
 app.get('/', function(req, res, next) {
     res.status(200).send(new ApiResponse("Hello World!", 200));
 });
@@ -23,4 +22,5 @@ app.use('*', function(req, res, next){
     res.status(404).send(new ApiResponse("This endpoint doesnt't exist", 404));
 });
 
+// Export class for test cases
 module.exports = app;

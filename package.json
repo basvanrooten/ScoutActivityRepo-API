@@ -7,8 +7,10 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.3.14",
+    "mongoose-timestamp": "^0.6.0",
     "morgan": "^1.9.1",
-    "tracer": "^0.9.6"
+    "tracer": "^0.9.6",
+    "validator": "^10.9.0"
   },
   "devDependencies": {},
   "scripts": {
