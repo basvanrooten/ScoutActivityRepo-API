@@ -1,0 +1,27 @@
+{
+  "name": "scoutactivityrepo-api",
+  "version": "1.0.0",
+  "description": "Scout Activity Repo API service",
+  "main": "index.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "mongoose": "^5.3.14",
+    "morgan": "^1.9.1",
+    "tracer": "^0.9.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/basvanrooten/ScoutActivityRepo-API.git"
+  },
+  "author": "Bas van Rooten",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/basvanrooten/ScoutActivityRepo-API/issues"
+  },
+  "homepage": "https://github.com/basvanrooten/ScoutActivityRepo-API#readme"
+}
