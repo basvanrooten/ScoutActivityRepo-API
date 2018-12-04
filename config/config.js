@@ -2,7 +2,18 @@
 const loglevel = process.env.LOGLEVEL || 'trace'
 
 module.exports = {
+
+    // Web port where the server will listen to
     "webPort": process.env.PORT || 3000,
+
+    // MongoDB URL van MLAB
+    "mongoURL": "mongodb+srv://nodeAPI:5jurs7rjZarm@scoutactivityrepo-db-iupae.azure.mongodb.net/test?retryWrites=true",
+
+    // Secret key for JWT encoding and decoding
+    "key": "fyh8z4rbiGAY7CkVRid6V5JYmAVs",
+
+    // JWT token duration
+    "jwtDuration": "30d",
 
 
     // Tracer for logging purposes

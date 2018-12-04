@@ -28,10 +28,18 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
+        validate: {
+            validator: (password) => password.length > 7 && password.length < 64,
+            message: 'Wachtwoord moet groter zijn dan 7 karakters en korter dan 64 karakters.'
+        },
         required: [true, 'Wachtwoord is vereist.']
     },
     salt: {
         type: String
+    },
+    permissions: {
+        type: Number,
+        default: 0
     }
 });
 

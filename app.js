@@ -1,9 +1,37 @@
+
+// Node dependancies
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const morgan = require("morgan");
+const logger = require('./config/config').logger
+const config = require('./config/config');
+
+// Import models
 const ApiResponse = require('./models/ApiReponse');
 
+// Import routes
+const user_routes = require('./routes/user_routes');
+
 const app = express();
+
+// If environment is not test, then connect to production hosted mongo server
+if (process.env.NODE_ENV !== 'test') {
+    console.log("Connecting to production database....");
+    mongoose.connect(config.mongoURL, {
+        useNewUrlParser: true,
+        useCreateIndex: true,
+        useFindAndModify: false});
+};
+
+// Check the connection. Output error if something's wrong
+const connection = mongoose.connection
+.once('open', () =>{ 
+	console.info(`Connected to MongoDB!`);
+})
+.on('error', (error) =>{
+	logger.error(error.toString());
+});
 
 // Parse the request body to JSON
 app.use(bodyParser.json());
@@ -12,6 +40,8 @@ app.use(bodyParser.json());
 app.use(morgan("dev"));
 
 // Routes
+app.use('/api', user_routes)
+
 app.get('/', function(req, res, next) {
     res.status(200).send(new ApiResponse("Hello World!", 200));
 });
