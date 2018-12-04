@@ -4,6 +4,7 @@ const config = require('../config/config');
 const jwt = require('jsonwebtoken');
 const assert = require('assert');
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 let key = config.key;
 
@@ -43,6 +44,7 @@ module.exports = {
         try {
             // Check if body contains the right types
             assert(typeof (userProps.email) === "string", "Email moet een string zijn");
+            assert(validator.isEmail(userProps.email), "Email is niet geldig")
             assert(typeof (userProps.password) === "string", "Wachtwoord moet een string zijn");
         } catch (e) {
             // Assertion exception
@@ -94,6 +96,7 @@ module.exports = {
 
         try {
             assert(typeof (userProps.email) === "string", "Email moet een string zijn");
+            assert(validator.isEmail(userProps.email), "Email is niet geldig")
             assert(userProps.email.length > 4, "Email moet langer zijn dan 5 karakters");
 
             assert(typeof (userProps.firstName) === "string", "Voornaam moet een string zijn");
@@ -111,7 +114,7 @@ module.exports = {
 
         } catch (e) {
             // Assertion exception
-            res.status(422).send(new ApiResponse(e.message), 422).end();
+            res.status(422).send(new ApiResponse(e.message, 422)).end();
             return;
         }
 
@@ -124,7 +127,13 @@ module.exports = {
                     bcrypt.hash(userProps.password, salt, (err, hash) => {
                         userProps.password = hash;
                         User.create(userProps)
-                            .then((user) => res.status(200).send(user))
+                            .then((user) => res.status(200).send({
+                                "_id": user._id,
+                                "email": user.email,
+                                "firstName": user.firstName,
+                                "lastName": user.lastName,
+                                "createdAt": user.createdAt
+                            }))
                             .catch(next);
                     })
                 });
