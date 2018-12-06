@@ -1,6 +1,7 @@
 const ApiResponse = require('../models/ApiReponse');
 const User = require('../models/User');
 const config = require('../config/config');
+const logger = require('../config/config').logger;
 const jwt = require('jsonwebtoken');
 const assert = require('assert');
 const bcrypt = require('bcrypt');
@@ -26,13 +27,22 @@ let key = config.key;
 module.exports = {
 
     authenticate(token, callback) {
-        if (process.env.NODE_ENV !== 'test') {
-            let payload = jwt.verify(token, key);
-            userExists(payload.username, (result) => {
-                callback(result)
-            })
-        } else {
-            callback(true);
+        
+        if (token === undefined) {
+            callback(false);
+            return;
+        }
+
+        token = token.replace("Bearer ", '');
+        try {
+            let payload = jwt.verify(token, config.key);
+            userExists(payload.email, (result) => {
+                callback(result);
+            });
+        } catch (e) {
+            logger.trace("Malfunctioning token! - " + token);
+            callback(false);
+            return;
         }
     },
 
@@ -66,7 +76,7 @@ module.exports = {
                             if (auth) {
                                 jwt.sign({
                                     email: user.email
-                                }, key, {
+                                }, config.key, {
                                     expiresIn: config.jwtDuration
                                 }, (err, token) => {
                                     // Send the token
@@ -138,7 +148,7 @@ module.exports = {
                     })
                 });
             } else {
-                res.status(401).send(new ApiResponse('Username already exists', 401)).end();
+                res.status(409).send(new ApiResponse('Username already exists', 409)).end();
             }
         });
     }
