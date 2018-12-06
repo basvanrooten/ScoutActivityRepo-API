@@ -19,6 +19,10 @@ function componentExists(name, callback) {
 
 module.exports = {
 
+
+
+    // CREATE
+
     // BODY: "name", "expressionField", "duration", "budget", "componentText"
     createComponent(req, res, next) {
         const componentProps = req.body;
@@ -71,6 +75,8 @@ module.exports = {
         });
     },
 
+    // READ
+
     getAllComponents(req, res, next) {
         let token = req.get('Authorization');
 
@@ -96,11 +102,96 @@ module.exports = {
         UserController.authenticate(token, (auth) => {
             // If token is valid, continue
             if (auth) {
-                Component.findById(params)
-                    .then(component => res.send(component))
-                    .catch(err => {
-                        res.status(404).send(new ApiResponse("Component not found", 404));
+                Component.findById(params, (err, component) => {
+                    // Check if error occured
+                    if (err) {
+                        // Error occured
+                        res.status(400).send(new ApiResponse(err.message, 400)).end();
+                        return;
+                    }
+                    if (!component) {
+                        // No component found, returning 404
+                        res.status(404).send(new ApiResponse("No component found with that ID", 404)).end();
+                        return;
+                    } else {
+                        // Component was found! Returning the component
+                        res.status(200).send(component).end();
+                        return;
+                    }
+                })
+
+            } else {
+                // Invalid token, send 401 response
+                res.status(401).send(new ApiResponse('Invalid or missing token. Unauthenticated', 401)).end();
+            }
+        });
+    },
+
+    // UPDATE
+    // BODY: "name", "expressionField", "duration", "budget", "componentText"
+    editComponentByID(req, res, next) {
+
+        const componentProps = req.body;
+        let token = req.get('Authorization');
+        let params = req.params.componentID;
+
+        UserController.authenticate(token, (auth) => {
+            // If token is valid, continue
+            if (auth) {
+                Component.findByIdAndUpdate(
+                    params,
+                    componentProps, {
+                        new: true
+                    },
+                    (err, component) => {
+                        // Check if error occured
+                        if (err) {
+                            // Error occured
+                            res.status(400).send(new ApiResponse(err.message, 400)).end();
+                            return;
+                        }
+                        if (!component) {
+                            // No component found, returning 404
+                            res.status(404).send(new ApiResponse("No component found with that ID", 404)).end();
+                            return;
+                        } else {
+                            // Component was edited successfully. Returning the new component
+                            res.status(200).send(component).end();
+                            return;
+                        }
                     });
+            } else {
+                // Invalid token, send 401 response
+                res.status(401).send(new ApiResponse('Invalid or missing token. Unauthenticated', 401)).end();
+            }
+        });
+    },
+
+    // DELETE
+    deleteComponentByID(req, res, next) {
+        let token = req.get('Authorization');
+        let params = req.params.componentID;
+
+        UserController.authenticate(token, (auth) => {
+            // If token is valid, continue
+            if (auth) {
+                Component.findByIdAndDelete(params, (err, component) => {
+                    // Check if error occured
+                    if (err) {
+                        // Error occured
+                        res.status(400).send(new ApiResponse(err.message, 400)).end();
+                        return;
+                    }
+                    if (!component) {
+                        // No component found, returning 404
+                        res.status(404).send(new ApiResponse("No component found with that ID", 404)).end();
+                        return;
+                    } else {
+                        // Component was deleted successfully. Returning 200 response
+                        res.status(200).send(new ApiResponse("Component successfully deleted", 200)).end();
+                        return;
+                    }
+                })
 
             } else {
                 // Invalid token, send 401 response
