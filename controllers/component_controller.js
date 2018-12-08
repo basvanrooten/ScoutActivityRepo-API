@@ -36,7 +36,7 @@ module.exports = {
                 try {
                     assert(typeof (componentProps.name) === "string", "Onderdeelnaam moet een string zijn");
                     assert(typeof (componentProps.expressionField) === "string", "Expressiegebied moet een string zijn");
-                    assert(typeof (componentProps.duration) === "number", "Expressiegebied moet een number zijn");
+                    assert(typeof (componentProps.duration) === "number", "Duur moet een number zijn");
                     assert(typeof (componentProps.budget) === "number", "Budget moet een bedrag zijn");
                     assert(typeof (componentProps.componentText) === "string", "Uitwerking moet een string zijn");
 

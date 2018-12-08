@@ -21,14 +21,13 @@ const ActivitySchema = new Schema({
         type: String,
         required: [true, 'Expressiegebied is vereist.']
     },
-    // STUB!
-    elements: {
-        type: String
-    },
     author: {
         type: String,
         required: [true, 'Auteur is vereist.']
-    }
+    },
+    components: [{ 
+        type: Schema.Types.ObjectId,
+        ref: 'component' }]
 });
 
 // Add timestamp plugin

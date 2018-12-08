@@ -13,6 +13,7 @@ const ApiResponse = require('./models/ApiReponse');
 // Import routes
 const user_routes = require('./routes/user_routes');
 const component_routes = require('./routes/component_routes');
+const activity_routes = require('./routes/activity_routes');
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use(morgan("dev"));
 // Routes
 app.use('/api', user_routes);
 app.use('/api', component_routes);
+app.use('/api', activity_routes);
 
 app.get('/', function(req, res, next) {
     res.status(200).send(new ApiResponse("Hello World!", 200));
