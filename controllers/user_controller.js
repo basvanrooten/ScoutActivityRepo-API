@@ -74,8 +74,14 @@ module.exports = {
                         bcrypt.compare(userProps.password, user.password, (err, auth) => {
                             // If they match, sign the token
                             if (auth) {
+
                                 jwt.sign({
-                                    email: user.email
+                                    _id: user._id,
+                                    email: user.email,
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    permissions: user.permissions,
+                                    lastChanged: user.lastChanged
                                 }, config.key, {
                                     expiresIn: config.jwtDuration
                                 }, (err, token) => {
