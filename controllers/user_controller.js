@@ -9,25 +9,25 @@ const validator = require('validator');
 
 let key = config.key;
 
-    // This function checks if email exists in database.
-    // If this is true, the user will exist
-    function userExists(email, callback) {
-        User.findOne({
-                email: email
-            })
-            .then((user) => {
-                if (user !== null) {
-                    callback(true);
-                } else {
-                    callback(false);
-                }
-            })
-    }
+// This function checks if email exists in database.
+// If this is true, the user will exist
+function userExists(email, callback) {
+    User.findOne({
+            email: email
+        })
+        .then((user) => {
+            if (user !== null) {
+                callback(true);
+            } else {
+                callback(false);
+            }
+        })
+}
 
 module.exports = {
 
     authenticate(token, callback) {
-        
+
         if (token === undefined) {
             callback(false);
             return;
@@ -74,7 +74,6 @@ module.exports = {
                         bcrypt.compare(userProps.password, user.password, (err, auth) => {
                             // If they match, sign the token
                             if (auth) {
-
                                 jwt.sign({
                                     _id: user._id,
                                     email: user.email,
@@ -107,7 +106,7 @@ module.exports = {
     },
 
     // BODY: "email", "firstName", "lastName", "password", "confirmPassword"
-    register(req, res, next){
+    register(req, res, next) {
         const userProps = req.body;
 
         try {
@@ -137,7 +136,7 @@ module.exports = {
         // Check if email already exists
         userExists(userProps.email, (result) => {
             // If it doesn't exist, it's ok to register
-            if(!result) {
+            if (!result) {
                 bcrypt.genSalt(10, (err, salt) => {
                     userProps.salt = salt;
                     bcrypt.hash(userProps.password, salt, (err, hash) => {
