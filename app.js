@@ -1,6 +1,7 @@
 
 // Node dependancies
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const morgan = require("morgan");
@@ -40,6 +41,9 @@ app.use(bodyParser.json());
 
 // Setup Morgan as Logger
 app.use(morgan("dev"));
+
+// Enable CORS-support
+app.use(cors());
 
 // Routes
 app.use('/api', user_routes);
