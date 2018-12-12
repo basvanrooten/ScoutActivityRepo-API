@@ -167,6 +167,44 @@ module.exports = {
     },
 
 
+    editActivityByID(req, res, next) {
+
+        const activityProps = req.body;
+        let token = req.get('Authorization');
+        let params = req.params.activityID;
+
+        UserController.authenticate(token, (auth) => {
+            // If token is valid, continue
+            if (auth) {
+                Activity.findByIdAndUpdate(
+                    params,
+                    activityProps, {
+                        new: true
+                    },
+                    (err, component) => {
+                        // Check if error occured
+                        if (err) {
+                            // Error occured
+                            res.status(400).send(new ApiResponse(err.message, 400)).end();
+                            return;
+                        }
+                        if (!component) {
+                            // No component found, returning 404
+                            res.status(404).send(new ApiResponse("No component found with that ID", 404)).end();
+                            return;
+                        } else {
+                            // Component was edited successfully. Returning the new component
+                            res.status(200).send(component).end();
+                            return;
+                        }
+                    });
+            } else {
+                // Invalid token, send 401 response
+                res.status(401).send(new ApiResponse('Invalid or missing token. Unauthenticated', 401)).end();
+            }
+        });
+    },
+
     // DELETE
     deleteActivityByID(req, res, next) {
         let token = req.get('Authorization');
