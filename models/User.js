@@ -46,6 +46,6 @@ const UserSchema = new Schema({
 // Add timestamp plugin
 UserSchema.plugin(timestamps);
 
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('user', UserSchema);
 
 module.exports = User;

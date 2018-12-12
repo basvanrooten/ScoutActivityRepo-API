@@ -37,6 +37,6 @@ const ComponentSchema = new Schema({
 // Add timestamp plugin
 ComponentSchema.plugin(timestamps);
 
-const Component = mongoose.model('Component', ComponentSchema);
+const Component = mongoose.model('component', ComponentSchema);
 
 module.exports = Component;

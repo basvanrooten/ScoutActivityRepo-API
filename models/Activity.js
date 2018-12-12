@@ -33,6 +33,6 @@ const ActivitySchema = new Schema({
 // Add timestamp plugin
 ActivitySchema.plugin(timestamps);
 
-const Activity = mongoose.model('Activity', ActivitySchema);
+const Activity = mongoose.model('activity', ActivitySchema);
 
 module.exports = Activity;
