@@ -198,5 +198,50 @@ module.exports = {
                 res.status(401).send(new ApiResponse('Invalid or missing token. Unauthenticated', 401)).end();
             }
         });
+    },
+
+    deleteComponentFromActivityByID(req, res, next) {
+        let token = req.get('Authorization');
+        let activityID = req.params.activityID;
+        let componentID = req.params.componentID;
+
+        UserController.authenticate(token, (auth) => {
+            // If token is valid, continue
+            if (auth) {
+                Activity.findById(activityID, (err, activity) => {
+                    // Check if error occured
+                    if (err) {
+                        // Error occured
+                        res.status(400).send(new ApiResponse(err.message, 400)).end();
+                        return;
+                    }
+                    if (!activity) {
+                        // No component found, returning 404
+                        res.status(404).send(new ApiResponse("No activity found with that ID", 404)).end();
+                        return;
+                    } else {
+                        componentExists(componentID, (result) => {
+                            if (result) {
+                                // Component exists! Popping it from the array
+                                activity.components.pop(componentID);
+                                activity.save();
+    
+                                // Component was edited successfully. Returning the new component
+                                res.status(200).send(activity).end();
+                                return;
+                            } else {
+                                // No component found, returning 404
+                                res.status(404).send(new ApiResponse("No component found with that ID", 404)).end();
+                                return;
+                            }
+                        });
+                    }
+                });
+            } else {
+                // Invalid token, send 401 response
+                res.status(401).send(new ApiResponse('Invalid or missing token. Unauthenticated', 401)).end();
+            }
+        });
+
     }
 };

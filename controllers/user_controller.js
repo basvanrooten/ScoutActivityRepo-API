@@ -153,7 +153,7 @@ module.exports = {
                     })
                 });
             } else {
-                res.status(409).send(new ApiResponse('Username already exists', 409)).end();
+                res.status(409).send(new ApiResponse('Er is al een gebruiker met deze email gevonden', 409)).end();
             }
         });
     }
