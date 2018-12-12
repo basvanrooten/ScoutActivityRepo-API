@@ -7,7 +7,7 @@ module.exports = {
     "webPort": process.env.PORT || 3000,
 
     // MongoDB URL van AZURE
-    "mongoURL": "mongodb+srv://nodeAPI:5jurs7rjZarm@scoutactivityrepo-db-iupae.azure.mongodb.net/test?retryWrites=true",
+    "mongoURL": "mongodb+srv://nodeAPI:5jurs7rjZarm@scoutactivityrepo-db-iupae.azure.mongodb.net/scoutactivityrepo?retryWrites=true",
 
     // Secret key for JWT encoding and decoding
     "key": "fyh8z4rbiGAY7CkVRid6V5JYmAVs",
